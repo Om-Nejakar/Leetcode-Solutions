@@ -5,14 +5,14 @@ public:
         int n = nums.size();
         vector<int> ans;
 
-        for(int i=0;i<n;i++) {
+        for(int i=0;i<n;i++) {  //O(n)
             //maintaining the size = k 
-            if(!dq.empty() && dq.front() <= i-k) {
+            if(!dq.empty() && dq.front() <= i-k) { //O(n) can only push k ele in worst its n 
                 dq.pop_front();
             }
 
             //if larger ele comes we have to pop so that large is at front and dec mono stack
-            while(!dq.empty() && nums[i] >= nums[dq.back()]) {
+            while(!dq.empty() && nums[i] >= nums[dq.back()]) { //O(n) can only pop k ele but in worst its n
                 dq.pop_back();
             }
             
