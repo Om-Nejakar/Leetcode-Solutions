@@ -12,49 +12,41 @@
 class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
-        vector<TreeNode*> v;
-        queue<TreeNode*> q;
+        queue<TreeNode*> q1;
+        queue<TreeNode*> q2;
 
         if(root == nullptr) {
             return true;
         }
 
-        if(root && !root->left && !root->right) {
-            return true;
-        }
+        q1.push(root->left);
+        q2.push(root->right);
+        
+        while(!q1.empty() && !q2.empty()) {
+            int n1 = q1.size();
+            int n2 = q2.size();
 
-        q.push(root->left);
-
-        while(!q.empty()) {
-            TreeNode* node = q.front();
-            q.pop();
-
-            v.push_back(node);
-
-            if(node) {
-                q.push(node->right);
-                q.push(node->left);
-            }
-            
-        }
-
-        q.push(root->right);
-        int i = 0;
-
-        while(!q.empty()) {
-            TreeNode* node = q.front();
-            q.pop();
-
-            TreeNode* mirrorNode = v[i++];
-
-            if(!node && !mirrorNode) continue;
-            if(!node || !mirrorNode || node->val != mirrorNode->val) {
+            if(n1 != n2) {
                 return false;
             }
 
-            if(node) {
-                q.push(node->left);
-                q.push(node->right);
+            for(int i=0;i<n1;i++) {
+                TreeNode* node1 = q1.front();
+                TreeNode* node2 = q2.front();
+                q1.pop();
+                q2.pop();
+
+                if(node1 == nullptr && node2 == nullptr) {
+                    continue;
+                }
+                if(node1==nullptr || node2 == nullptr || node1->val != node2->val) { //if anyone is null 
+                    return false;
+                }
+                
+                q1.push(node1->left);
+                q1.push(node1->right);
+                q2.push(node2->right);
+                q2.push(node2->left);
             }
         }
         return true;
