@@ -23,11 +23,10 @@ public:
     bool isValidBST(TreeNode* root) {
         vector<int> v;
         f(root, v);
-        vector<int> temp(v.begin(), v.end());
-        sort(temp.begin(), temp.end());
-        if(temp == v) { //it is bst 
-            return true;
+        
+        for(int i = 1; i < v.size(); i++) {
+            if(v[i] <= v[i-1]) return false; //not bst
         }
-        return false; //it is bt
+        return true; //it is bst
     }
 };
