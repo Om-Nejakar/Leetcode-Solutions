@@ -11,22 +11,21 @@
  */
 class Solution {
 public:
-    void f(TreeNode* root, vector<int>& v) {
+    bool f(TreeNode* root, long long minRange, long long maxRange) {
         if(root == nullptr) {
-            return;
+            return true;
+        }
+        if(root->val <= minRange || root->val >= maxRange) {
+            return false;
         }
 
-        f(root->left, v);
-        v.push_back(root->val);
-        f(root->right, v);
+        bool lefside = f(root->left, minRange, root->val);
+        bool rightside = f(root->right, root->val, maxRange);
+
+        return lefside && rightside;
     }
+
     bool isValidBST(TreeNode* root) {
-        vector<int> v;
-        f(root, v);
-        
-        for(int i = 1; i < v.size(); i++) {
-            if(v[i] <= v[i-1]) return false; //not bst
-        }
-        return true; //it is bst
+        return f(root, LLONG_MIN, LLONG_MAX);
     }
 };
