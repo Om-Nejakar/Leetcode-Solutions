@@ -22,9 +22,7 @@ public:
             hp[root->val] = true;
         }
 
-        bool left = f(root->left, hp, k);
-        bool right = f(root->right, hp, k);
-        return left || right;
+        return f(root->left, hp, k) || f(root->right, hp, k);
     }
     bool findTarget(TreeNode* root, int k) {
         unordered_map<int , bool> hp;
