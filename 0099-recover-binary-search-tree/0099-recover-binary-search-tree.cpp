@@ -11,35 +11,38 @@
  */
 class Solution {
 public:
-    //brute approach 
-    //do a inorder traversal (will get in sorted order)
-    //now again traverse the tree and replace with correct values 
-    void inorder(TreeNode* root, vector<int>& v) {
-        if(root == nullptr) {
-            return;
-        }
-        inorder(root->left, v);
-        v.push_back(root->val);
-        inorder(root->right, v);
-    }
-    void traverse(TreeNode* root, vector<int>& v, int& i) {
-        if(root == nullptr) {
-            return;
-        }
+    TreeNode* first;
+    TreeNode* prev;
+    TreeNode* middle;
+    TreeNode* last;
 
-        traverse(root->left, v, i);
-        if(v[i] != root->val) {
-            root->val = v[i];
+    void inorder(TreeNode* root) {
+        if(root == nullptr) {
+            return;
         }
-        i++;
-        traverse(root->right, v, i);
+        inorder(root->left);
+        
+        if(prev != nullptr && (root->val < prev->val)) { //violation happened
+            if(first == nullptr) { //first violation
+                first = prev;
+                middle = root;
+            }else {
+                last = root; //second violation
+            }
+        }
+        prev = root;
+        inorder(root->right);
     }
 
     void recoverTree(TreeNode* root) {
-        vector<int> v;
-        inorder(root, v);
-        sort(v.begin(), v.end()); //as now it is not sorted due to swap 
-        int i = 0;
-        traverse(root, v, i);
+        first = middle = last = nullptr;
+        prev = new TreeNode(INT_MIN); //in inoreder 1st ele is always smallest
+        inorder(root);
+        
+        if(first && last) { //if not adjacent
+            swap(first->val, last->val);
+        }else if(first && middle) {
+            swap(first->val, middle->val);
+        }
     }
 };
