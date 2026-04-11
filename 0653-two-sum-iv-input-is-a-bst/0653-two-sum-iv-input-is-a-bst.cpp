@@ -11,21 +11,20 @@
  */
 class Solution {
 public:
-    bool f(TreeNode* root, unordered_map<int, bool>& hp, int k) {
+    bool f(TreeNode* root, unordered_set<int>& s, int k) {
         if(root == nullptr) {
             return false;
         }
 
-        if(hp.find(k-root->val) != hp.end()) {
+        if(s.count(k-root->val)) {
             return true;
-        }else {
-            hp[root->val] = true;
         }
+        s.insert(root->val);
 
-        return f(root->left, hp, k) || f(root->right, hp, k);
+        return f(root->left, s, k) || f(root->right,s, k);
     }
     bool findTarget(TreeNode* root, int k) {
-        unordered_map<int , bool> hp;
-        return f(root, hp, k);
+        unordered_set<int> s;
+        return f(root, s, k);
     }
 };
